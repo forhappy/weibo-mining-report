@@ -1,7 +1,8 @@
-%\documentclass[table, handout, pdftex]{beamer}
-%\documentclass[CJK, table, handout]{beamer}
-\documentclass[CJKutf8, table]{beamer}
+\documentclass[CJKutf8, table, handout]{beamer}
+%\documentclass[CJKutf8, table]{beamer}
+
 %%%% theme used %%%%
+
 \usetheme{Frankfurt}
 
 %%%% import package %%%%
@@ -41,6 +42,7 @@
 %\pgfdeclareimage[height=60pt]{logo}{ictlogo.png}
 %\logo{\pgfuseimage{logo}\hspace{-2pt}\vspace{-8pt}}
 
+\usetikzlibrary{backgrounds}
 
 \logo{\includegraphics[height=0.045\textwidth]{ictlogo.png}}
 
@@ -154,21 +156,128 @@
 \subsection{文本建模}
 \begin{frame}
   \frametitle{文本建模}
+  \begin{small}
+  \begin{block}{布尔模型}
+    布尔模型的每个词的出现与否只有~0~与~1~两值，布尔模型是最简单的文本模型。
+  \end{block}
+  \pause
+  \begin{block}{向量空间模型(Vector Space Model, VSM)}
+    向量空间模型最早由Gerard提出\cite{Salton}。在此模型中，一个文档(Document)被描述成由
+    一系列关键词(Term)组成的向量。假设我们用``词''作为Term，那么词典中的每一个词
+    ，都定义为向量空间中的一维。如果一篇文档包含该词，那么表示这个文档的向量在这个词所定
+    义的维度上应该拥有一个非0值。
+  \end{block}
+  \pause
+  \begin{block}{概率模型(Probabilistic Model)}
+    概率模型的基本思想是估计文档与查询相关联概率，并对所有文档根据关联概率进行排序。
+    这一模型最早由~Maron~和~Kuhn~在1960年提出。
+  \end{block}
+\end{small}
+\end{frame}
+
+\begin{frame}
+  \frametitle{向量空间模型\cite{Wikipedia-IR}}
+  \begin{tiny}
+    \begin{block}{定义}
+      文本表示采用空间向量模型(VSM)。空间向量模型的基本思想是以一个规范化的特征向量来表示文本。
+      \begin{itemize}
+          \item{如果一个特征词在某个文档中出现次数越多，那么该词应被认为越重要。}
+          \item{如果一个特征词在越多的文档中出现，那么该词区分文档的作用就越低，
+            于是其重要性也应当相应降低。}
+          \item{一篇文档越长，那么其出现某个特征词的次数可能越高，而每个关键词对这个
+            文档的区分作用也越低，相应的应该对这些特征词予以一定的折扣。}
+        \end{itemize}
+    \end{block}
+  \end{tiny}
+  \pause
+  \begin{tiny}
+    \begin{block}{文本表示}
+      设文本集合$D = \{D_1, D_2, \cdots, D_n\}$，文档$D_i$的特征词向量为
+      $d_i = \{t_{i1}, t_{i2}, \cdots, t_{in}\}$，其中$t_{ij}$表示特征词
+      $T_j$($T_j \in TS, n = \vert TS \vert$,$TS$ 表示全部文档中出现的特征词集合)
+      在文档$D_i$中的权重，在TF-IDF权重计算方式下，特征词的权重定义如下：。
+      \pause
+      $$
+      t_{ij} = tf \times \mathrm{idf_i} = tf \times \log \frac{|D|}{|\{d: d \ni t_{i}\}|}
+      $$
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+\begin{frame}
+  \frametitle{特征词权重计算}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{itemize}
+        \item{Okapi权重\cite{Robertson}
+          $$
+          w(t, D) = \ln \frac{N-df+0.5}{df + 0.5}\cdot
+          \frac{(k_1 + 1) tf}{(k_1(1-b)+b\frac{L_D}{E(D)})+tf}
+          $$}
+          \pause
+        \item{TFC
+          $$
+          w(t, D) = \frac{\log (tf + 1.0) \times \log \frac{N}{df}}{\sqrt{\sum_{t \in
+          D}\left[\log (tf + 1.0) \times \log \frac{N}{df}\right]^2}}
+          $$}
+          \pause
+        \item{熵权重
+          $$
+          w(t, D) = \log (tf + 1.0) \times \left (1 + \frac{1}{\log N} \times
+          \sum_{j = 1}^N\left [\frac{tf_j}{df} \times \log
+          \frac{tf_j}{df}\right]\right)
+          $$}
+          \pause
+        \item{Pivoted Normalization 权重\cite{Singhal}
+          $$
+          w(t, D) = \sum_{t\in D} \frac{1 + \ln (1+ \ln(tf))}{(1-s)+s
+          \frac{L_D}{E(D)}}\cdot \ln \frac{N+1}{df}
+          $$}
+        \end{itemize}
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 \subsection{特征信息扩展}
 \begin{frame}
   \frametitle{特征信息扩展}
+  
 \end{frame}
 
 \subsection{降维}
 \begin{frame}
   \frametitle{降维}
+  \begin{block}{信息增益}
+    \begin{tiny}
+    信息增益(Information Gain)又称为~Kullback-Leibler Divergence、相对熵。在概率论和信息论中，
+    信息增益用以度量两种概率分布~P~与~Q~的差异，信息增益描述了当时用~Q~进行编码时，
+    再使用~P~进行编码的差异（即采用~P~编码时需要的额外的比特数），
+    通常~P~代表样本或观察值的分布，也有可能是精确计算的理论分布，Q~代表一种理论，
+    模型，描述或对~P~的近似。设离散随机变量的概率分布为~P~和~Q~，他们的信息增益
+    定义为：
+    \end{tiny}
+    \pause
+    $$D_{KL}(P \Vert Q) = \sum_iP(i) \ln \frac{P(i)}{Q(i)}
+    $$
+  \end{block}
+  \pause
+  \begin{block}{特征词的选择}
+    由于对微博内容先验知识的缺乏，本系统采取了词频与信息增益相结合的方式来进行
+    特征信息的降维，特征信息增益越大，说明特征中包含的鉴别信息就越多，
+    选择信息增益值的前50\%作为微博的特征向量。
+  \end{block}
 \end{frame}
 
 \subsection{文本聚类}
 \begin{frame}
   \frametitle{文本聚类}
+  \begin{block}{}
+    \begin{center}物以类聚，人以群分\end{center}
+  \end{block}
+  \pause
+  \begin{block}{采用Mahout进行文本聚类}
+    Apache Mahout 是一个机器学习的框架，构建在hadoop上支持大规模数据集的处理，目前最新稳定版本0.6
+  \end{block}
 \end{frame}
 
 \subsection{系统结构图}
@@ -180,33 +289,391 @@
 \section{系统实现}
 
 \subsection{微博分词}
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{微博分词}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+        public String weiboSplitProcessing(String input) {
+            try {
+                byte nativeBytes[] = ictclas50.ICTCLAS_ParagraphProcess(
+                    input.getBytes("GB2312"), 2, 0);
+                String nativeStr = new String(nativeBytes, 0,
+                    nativeBytes.length, "GB2312");
+                return nativeStr;
+            } catch (Exception e) {
+            logger.debug(e.getMessage());
+            return null;
+            }
+        }
+    \end{lstlisting}
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+% \begin{frame}[fragile]
+%   \frametitle{微博分词}
+%   \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+%   \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+%   \definecolor{lightgray}{rgb}{.9,.9,.9}
+%   \lstset{backgroundcolor=\color{lightgray}}
+%   \begin{tiny}
+%     \begin{block}{}
+%       \begin{lstlisting}[language=Java]
+%         public String weiboSplitProcessing(String input) {
+%             try {
+%                 byte nativeBytes[] = ictclas50.ICTCLAS_ParagraphProcess(
+%                     input.getBytes("GB2312"), 2, 0);
+%                 String nativeStr = new String(nativeBytes, 0,
+%                     nativeBytes.length, "GB2312");
+%                 return nativeStr;
+%             } catch (Exception e) {
+%             logger.debug(e.getMessage());
+%             return null;
+%             }
+%         }
+%     \end{lstlisting}
+%     \end{block}
+%   \end{tiny}
+% \end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{微博分词}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+    public class WeiboSplitter {
+	    /**
+	     * logger.
+	     */
+	    public static final Logger logger = 
+            LoggerFactory.getLogger(WeiboSplitter.class);
+        ICTCLAS50 ictclas50 = new ICTCLAS50();
+        public WeiboSplitter() {
+            super();
+            try {
+                if (ictclas50.ICTCLAS_Init(path.getBytes("GB2312")) == false) {
+                    logger.debug("Init Failed!");
+                }
+            } catch (UnsupportedEncodingException e) {
+                logger.debug(e.getMessage());
+                e.printStackTrace();
+            }
+            ictclas50.ICTCLAS_SetPOSmap(2);
+            byte[] usrdirb = usrdir.getBytes();
+            int userDictsCounter = ictclas50.ICTCLAS_ImportUserDictFile(usrdirb, 0);
+        }
+        public String weiboSplitProcessing(String input) {
+                        . . . . . .
+        }
+        public void finalize() {
+            ictclas50.ICTCLAS_SaveTheUsrDic();
+            ictclas50.ICTCLAS_Exit();
+        }
+    }
+      \end{lstlisting}
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 \subsection{去除停用词}
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{去除停用词}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+    public String remove(String sentence) {
+        String regex = " ";
+        String[] words = sentence.split(regex);
+        StringBuilder stopWordRemoved = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+        if (contains(words[i]));
+            else {
+                stopWordRemoved.append(words[i]);
+                stopWordRemoved.append(" ");
+            }
+        }
+        return stopWordRemoved.toString();
+    }
+      \end{lstlisting}
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 \subsection{特征信息扩展}
 \begin{frame}
   \frametitle{特征信息扩展}
+  \begin{block}{}
+    特征信息扩展初步选择同义词扩展。
+  \end{block}
+  \begin{block}{}
+   采集的同义词库达到了10万数量级以上，《同义词词林》等。
+  \end{block}
+  \begin{block}{}
+    还可以采用《知网》语言知识库。
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{特征信息扩展}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+    public String extendSynonymWords(String sentence) {
+        String regex = " ";
+        String[] words = sentence.split(regex);
+        StringBuilder synonymWordsAdded = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (contains(words[i])) {
+                synonymWordsAdded.append(words[i]);
+                synonymWordsAdded.append(" ");
+                synonymWordsAdded.append(synonymWords(words[i]));
+            } else {
+                synonymWordsAdded.append(words[i]);
+                synonymWordsAdded.append(" ");
+            }
+        }
+        return synonymWordsAdded.toString();
+    }
+    
+    public String extendSynonymWords(String sentence, int depth) {
+        if (depth <= 0) return sentence;
+        else return extendSynonymWords(extendSynonymWords(sentence, depth - 1));
+    }
+      \end{lstlisting}
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 \subsection{特征信息降维}
 \begin{frame}
   \frametitle{特征信息降维}
+  \begin{block}{特征词的选择}
+    由于对微博内容先验知识的缺乏，本系统采取了词频与信息增益相结合的方式来进行
+    特征信息的降维，特征信息增益越大，说明特征中包含的鉴别信息就越多，
+    选择信息增益值的前50\%作为微博的特征向量。
+  \end{block}
+
+  \pause
+  \begin{block}{词项$T_k$的信息增益IG}
+    \pause
+    \begin{small}
+    \begin{eqnarray*}
+      \begin{array}{crl}
+        IG(T, T_k) &=&I(T) - I(T, T_k)\\
+        &=& \sum_{k = 1 \cdots n}P_k \times \log P_k -
+        \sum_{k = 1 \cdots n} \frac{P_k}{P_k \times \log P_k} \times P_k \times log P_k\\
+      \end{array}
+    \end{eqnarray*}
+    \end{small}
+  \end{block}
+ 
+\end{frame}
+\subsection{建立倒排索引}
+\begin{frame}[fragile]
+  \frametitle{建立倒排索引}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+\begin{tikzpicture}[scale=.5, transform shape]
+  \tikzstyle{every node}=[draw,shape=rectangle];
+  \node (TermM) at (0, 0) {词项m};
+  \node (Term6) at (0, 1) {词项6};
+  \node (Term5) at (0, 2) {词项5};
+  \node (Term4) at (0, 3) {词项4};
+  \node (Term3) at (0, 4) {词项3};
+  \node (Term2) at (0, 5) {词项2};
+  \node (Term1) at (0, 6) {词项1};
+
+  \pause
+  \node (WeiboPair71) at (3, 6) {$<$微博1，次数$>$};
+  \node (WeiboPair72) at (7, 6) {$<$微博2，次数$>$};
+  \node (WeiboPair73) at (11, 6) {$<$微博3，次数$>$};
+  \node (WeiboPair74) at (15, 6) {$<$微博4，次数$>$};
+  \node (WeiboPair7n) at (19, 6) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair61) at (3, 5) {$<$微博1，次数$>$};
+  \node (WeiboPair62) at (7, 5) {$<$微博2，次数$>$};
+  \node (WeiboPair63) at (11, 5) {$<$微博3，次数$>$};
+  \node (WeiboPair64) at (15, 5) {$<$微博4，次数$>$};
+  \node (WeiboPair6n) at (19, 5) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair51) at (3, 4) {$<$微博1，次数$>$};
+  \node (WeiboPair52) at (7, 4) {$<$微博2，次数$>$};
+  \node (WeiboPair53) at (11, 4) {$<$微博3，次数$>$};
+  \node (WeiboPair54) at (15, 4) {$<$微博4，次数$>$};
+  \node (WeiboPair5n) at (19, 4) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair41) at (3, 3) {$<$微博1，次数$>$};
+  \node (WeiboPair42) at (7, 3) {$<$微博2，次数$>$};
+  \node (WeiboPair43) at (11, 3) {$<$微博3，次数$>$};
+  \node (WeiboPair44) at (15, 3) {$<$微博4，次数$>$};
+  \node (WeiboPair4n) at (19, 3) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair31) at (3, 2) {$<$微博1，次数$>$};
+  \node (WeiboPair32) at (7, 2) {$<$微博2，次数$>$};
+  \node (WeiboPair33) at (11, 2) {$<$微博3，次数$>$};
+  \node (WeiboPair34) at (15, 2) {$<$微博4，次数$>$};
+  \node (WeiboPair3n) at (19, 2) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair21) at (3, 1) {$<$微博1，次数$>$};
+  \node (WeiboPair22) at (7, 1) {$<$微博2，次数$>$};
+  \node (WeiboPair23) at (11, 1) {$<$微博3，次数$>$};
+  \node (WeiboPair24) at (15, 1) {$<$微博4，次数$>$};
+  \node (WeiboPair2n) at (19, 1) {$<$微博n，次数$>$};
+
+  \pause
+  \node (WeiboPair11) at (3, 0) {$<$微博1，次数$>$};
+  \node (WeiboPair12) at (7, 0) {$<$微博2，次数$>$};
+  \node (WeiboPair13) at (11, 0) {$<$微博3，次数$>$};
+  \node (WeiboPair14) at (15, 0) {$<$微博4，次数$>$};
+  \node (WeiboPair1n) at (19, 0) {$<$微博n，次数$>$};
+
+  \pause
+  \foreach \from/\to in {TermM/WeiboPair11, WeiboPair11/WeiboPair12,
+  WeiboPair12/WeiboPair13, WeiboPair13/WeiboPair14, WeiboPair14/WeiboPair1n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {TermM/WeiboPair11, WeiboPair11/WeiboPair12,
+  WeiboPair12/WeiboPair13, WeiboPair13/WeiboPair14, WeiboPair14/WeiboPair1n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term6/WeiboPair21, WeiboPair21/WeiboPair22,
+  WeiboPair22/WeiboPair23, WeiboPair23/WeiboPair24, WeiboPair24/WeiboPair2n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term5/WeiboPair31, WeiboPair31/WeiboPair32,
+  WeiboPair32/WeiboPair33, WeiboPair33/WeiboPair34, WeiboPair34/WeiboPair3n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term4/WeiboPair41, WeiboPair41/WeiboPair42,
+  WeiboPair42/WeiboPair43, WeiboPair43/WeiboPair44, WeiboPair44/WeiboPair4n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term3/WeiboPair51, WeiboPair51/WeiboPair52,
+  WeiboPair52/WeiboPair53, WeiboPair53/WeiboPair54, WeiboPair54/WeiboPair5n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term2/WeiboPair61, WeiboPair61/WeiboPair62,
+  WeiboPair62/WeiboPair63, WeiboPair63/WeiboPair64, WeiboPair64/WeiboPair6n}
+  \draw[->] (\from) -- (\to);
+
+  \foreach \from/\to in {Term1/WeiboPair71, WeiboPair71/WeiboPair72,
+  WeiboPair72/WeiboPair73, WeiboPair73/WeiboPair74, WeiboPair74/WeiboPair7n}
+  \draw[->] (\from) -- (\to);
+\end{tikzpicture}
 \end{frame}
 
 \subsection{特征词权重计算}
 \begin{frame}
   \frametitle{特征词权重计算}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{itemize}
+        \item<1- | alert@1>{Okapi权重\cite{Robertson}
+          $$
+          w(t, D) = \ln \frac{N-df+0.5}{df + 0.5}\cdot
+          \frac{(k_1 + 1) tf}{(k_1(1-b)+b\frac{L_D}{E(D)})+tf}
+          $$}
+        \item<2- | alert@2>{TFC
+          $$
+          w(t, D) = \frac{\log (tf + 1.0) \times \log \frac{N}{df}}{\sqrt{\sum_{t \in
+          D}\left[\log (tf + 1.0) \times \log \frac{N}{df}\right]^2}}
+          $$}
+        \item<3- | alert@3>{熵权重
+          $$
+          w(t, D) = \log (tf + 1.0) \times \left (1 + \frac{1}{\log N} \times
+          \sum_{j = 1}^N\left [\frac{tf_j}{df} \times \log
+          \frac{tf_j}{df}\right]\right)
+          $$}
+        \item<4- | alert@4>{Pivoted Normalization 权重\cite{Singhal}
+          $$
+          w(t, D) = \sum_{t\in D} \frac{1 + \ln (1+ \ln(tf))}{(1-s)+s
+          \frac{L_D}{E(D)}}\cdot \ln \frac{N+1}{df}
+          $$}
+        \end{itemize}
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{特征词权重计算}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+    public Map<String, Map<String, Double>> weight(WeiboXMLHandler.Weibo weibo) {
+        String docNo = weibo.getDocNo();
+        Map<String, Map<String, Double>> mapWeight = new HashMap<String, Map<String,Double>>();
+        Map<String, Double> mapTermWeight = new TreeMap<String, Double>();
+        Iterator iterSetUniqueTerms = setUniqueTerms.iterator();
+        while (iterSetUniqueTerms.hasNext()) {
+            String term = (String) iterSetUniqueTerms.next();
+            double weight = calculateTermWeight(term, weibo);
+            mapTermWeight.put(term, new Double(weight));
+        }
+        mapWeight.put(docNo, mapTermWeight);
+        return mapWeight;
+    }
+      \end{lstlisting}
+    \end{block}
+  \end{tiny}
+  \pause
+  \begin{tiny}
+    \begin{block}{}
+      返回值(微博ID : $<$特征词1, 权重1$>$ $<$特征词2, 权重2$>$ ...$<$特征词n, 权重n$>$)
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 \subsection{聚类}
 \begin{frame}
   \frametitle{聚类}
+  \begin{block}{}
+    聚类采用Mahout库中的工具进行聚类。
+  \end{block}
+  \pause
+  \begin{block}{}
+    The Apache \href{http://mahout.apache.org/}{$Mahout^{TM}$} machine learning library's goal is to build scalable
+    machine learning libraries\cite{Mahout}, which provides:
+    \begin{center}
+    \begin{itemize}
+        \item Collaborative Filtering
+        \item User and Item based recommenders
+        \item K-Means, Fuzzy K-Means clustering
+        \item Mean Shift clustering
+        \item Dirichlet process clustering
+        \item Latent Dirichlet Allocation
+        \item And much much more\ldots
+      \end{itemize}
+    \end{center}
+  \end{block}
+  
 \end{frame}
 
 %%%%%%%%%%% 测试与结论 %%%%%%%%%%%%%%
@@ -214,5 +681,24 @@
 \begin{frame}
   \frametitle{测试与结论}
 \end{frame}
+
+\section{参考文献}
+\begin{frame}
+  \frametitle{参考文献}
+  \begin{thebibliography}{99}
+    \bibitem[Wikipedia,文本信息检索]{Wikipedia-IR}http://zh.wikipedia.org/zh/文本信息检索
+    \bibitem[Salton,1975]{Salton}G. Salton, A. Wong, and C.S. Yang, “A
+      vector space model for information retrieval”, Communications of the ACM,
+      vol. 18(11), pp. 613–620, 1975.
+    \bibitem[Robertson, 1999]{Robertson}S. E. Robertson, S. Walker, and M.
+      Beaulieu, “Okapi at TREC7, automatic ad hoc, filtering, VLC and filtering
+      tracks”, in Seventh Text REtrieval Conference (TREC-7), pp. 253–264, 1999.
+    \bibitem[Singhal, 1999]{Singhal}A. Singhal, J. Choi, D. Hindle, D. Lewis,
+      and F. Pereira, “AT\&Tat TREC 7”, in Proceedings of the Seventh Text
+      REtrieval Conference(TREC-7), vol. 500, pp. 239–252, 1999.
+    \bibitem[Mahout, official website]{Mahout}http://mahout.apache.org/
+  \end{thebibliography}
+\end{frame}
+
 \end{CJK}
 \end{document}
