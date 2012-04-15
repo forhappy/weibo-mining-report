@@ -1,0 +1,218 @@
+%\documentclass[table, handout, pdftex]{beamer}
+%\documentclass[CJK, table, handout]{beamer}
+\documentclass[CJK, table]{beamer}
+%%%% theme used %%%%
+\usetheme{Frankfurt}
+
+%%%% import package %%%%
+\usepackage{tikz}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{pgf, pgfarrows, pgfnodes, pgfautomata, pgfheaps}
+\usepackage{fancybox}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{enumerate}
+\usepackage{courier}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{wasysym}
+\useoutertheme{progressbar}
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	language=Java,
+	captionpos=b,
+	tabsize=4,
+	frame=lines,
+	keywordstyle=\color{blue},
+	commentstyle=\color{darkgreen},
+	stringstyle=\color{red},
+	breaklines=true,
+	showstringspaces=false,
+	basicstyle=\footnotesize,
+	emph={label}
+	}
+
+%\pgfdeclareimage[height=60pt]{logo}{ictlogo.png}
+%\logo{\pgfuseimage{logo}\hspace{-2pt}\vspace{-8pt}}
+
+
+\logo{\includegraphics[height=0.045\textwidth]{ictlogo.png}}
+
+%%%% title page %%%%
+
+\title[Weibo-Mining]{基于微博短文本特征词扩展与降维技术的\\网络热点分析}
+\subtitle{}
+\author[Fu H.P.]{傅海平\inst{1} \and 赵震\inst{2} \and 崔遥\inst{3} 
+\and 王维\inst{4} \and 王宁宁\inst{5} \and 马苗\inst{6}}
+\institute[ICT]{\textsc{\inst{1,2,3,4}计算技术研究所, \inst{5}城市规划发展研究中心, \inst{6}国家空间科学中心\\[5ex]}
+\textbf{中国科学院研究生院, 北京海淀, 中国\\[3ex]}
+\texttt{\inst{1}haiping.ict, \inst{4}wangwei881116}@gmail.com}
+%\texttt{haipingf@gmail.com}
+\date{\today}
+
+% \AtBeginSection[]
+% {
+% \begin{frame}
+%   \frametitle{Outline}
+%   \tableofcontents[currentsection, currentsubsection, current]
+% \end{frame}
+% }
+
+\AtBeginSection[]
+{
+\begin{frame}[shrink]
+\begin{CJK}{UTF8}{gbsn}
+
+	\frametitle{目录}
+	\tableofcontents[%
+ 		currentsection, % causes all sections but the current to be shown in a semi-transparent way.
+% 		currentsubsection, % causes all subsections but the current subsection in the current section to ...
+% 		hideallsubsections, % causes all subsections to be hidden.
+ 		hideothersubsections, % causes the subsections of sections other than the current one to be hidden.
+% 		part=, % part number causes the table of contents of part part number to be shown
+%		pausesections, % causes a \pause command to be issued before each section. This is useful if you
+% 		pausesubsections, %  causes a \pause command to be issued before each subsection.
+% 		sections={ overlay specification },
+	]
+\end{CJK}
+\end{frame}
+}
+
+%%%% begin document %%%%
+\begin{document}
+
+\begin{CJK}{UTF8}{gbsn}
+
+\begin{frame}
+\begin{CJK}{UTF8}{gbsn}
+  \titlepage
+\end{CJK}
+\end{frame}
+
+%%%%%%%%%%% 背景及目的 %%%%%%%%%%%%%%
+\section{背景及目的}
+\subsection{网络热点发现的兴起}
+\begin{frame}
+  \frametitle{Web2.0~时代的网络与个人}
+\end{frame}
+
+\subsection{网络热点挖掘的意义}
+\begin{frame}
+  \frametitle{网络热点挖掘的意义}
+\end{frame}
+
+%%%%%%%%%%% 研究现状 %%%%%%%%%%%%%%
+\section{研究现状}
+\subsection{国内研究现状}
+\begin{frame}
+  \frametitle{国内研究现状}
+\end{frame}
+
+\subsection{国外研究现状}
+\begin{frame}
+  \frametitle{国外研究现状}
+\end{frame}
+
+\subsection{小结}
+\begin{frame}
+  \frametitle{小结}
+\end{frame}
+
+%%%%%%%%%%% 设计方案 %%%%%%%%%%%%%%
+\section{设计方案}
+\subsection{微博预处理}
+\begin{frame}
+  \frametitle{微博预处理}
+  \begin{itemize}
+    \item<1- | alert@1>{分词: 拟采用计算所分词程序
+      ~\href{http://ictclas.org/}{~ICTCLAS~}}
+      \begin{itemize}
+        \item[*]<2->{以下是广告时间\smiley}
+        \item[*]<3- | alert@3>{ICTCLAS在国内973专家组组织的评测中活动获得了第一名，
+          在第一届国际中文处理研究机构SigHan组织的评测中都获得了多项第一名。}
+        \item[*]<4- | alert@4>{综合性能——ICTCLAS 2011分词速500KB/s左右，
+          分词精度98.45\%，API不超过100KB，
+          各种词典数据压缩后不到3M。}
+        \item[*]<5- | alert@5>{全方位支持各种环境下的应用开发。}
+      \end{itemize}
+    \item<6- | alert@6>{去除停用词}
+      \begin{itemize}
+        \item[*]<7- | alert@7>{停用词初步定义为助词、介词、连词等虚词以及词语长度为
+          1 的无实际含义的词}
+        \item[*]<8- | alert@8>{停用词表：共收集了1928个停用词}
+        \item[*]<9- | alert@9>{由于微博趋向于口语化，所以停用词需精心筛选}
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{文本建模}
+\begin{frame}
+  \frametitle{文本建模}
+\end{frame}
+
+\subsection{特征信息扩展}
+\begin{frame}
+  \frametitle{特征信息扩展}
+\end{frame}
+
+\subsection{降维}
+\begin{frame}
+  \frametitle{降维}
+\end{frame}
+
+\subsection{文本聚类}
+\begin{frame}
+  \frametitle{文本聚类}
+\end{frame}
+
+\subsection{系统结构图}
+\begin{frame}
+  \frametitle{系统结构图}
+\end{frame}
+
+%%%%%%%%%%% 系统实现 %%%%%%%%%%%%%%
+\section{系统实现}
+
+\subsection{微博分词}
+\begin{frame}
+  \frametitle{微博分词}
+\end{frame}
+
+\subsection{去除停用词}
+\begin{frame}
+  \frametitle{去除停用词}
+\end{frame}
+
+\subsection{特征信息扩展}
+\begin{frame}
+  \frametitle{特征信息扩展}
+\end{frame}
+
+\subsection{特征信息降维}
+\begin{frame}
+  \frametitle{特征信息降维}
+\end{frame}
+
+\subsection{特征词权重计算}
+\begin{frame}
+  \frametitle{特征词权重计算}
+\end{frame}
+
+\subsection{聚类}
+\begin{frame}
+  \frametitle{聚类}
+\end{frame}
+
+%%%%%%%%%%% 测试与结论 %%%%%%%%%%%%%%
+\section{测试与结论}
+\begin{frame}
+  \frametitle{测试与结论}
+\end{frame}
+\end{CJK}
+\end{document}
