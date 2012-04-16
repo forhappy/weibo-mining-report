@@ -1,5 +1,5 @@
-\documentclass[CJKutf8, table, handout]{beamer}
-%\documentclass[CJKutf8, table]{beamer}
+%\documentclass[CJKutf8, table, handout]{beamer}
+\documentclass[CJKutf8, table]{beamer}
 
 %%%% theme used %%%%
 
@@ -25,6 +25,9 @@
 
 \definecolor{listinggray}{gray}{0.9}
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+
+\let\definition\relax
+\newtheorem{definition}[theorem]{定义}
 \lstset{
 	language=Java,
 	captionpos=b,
@@ -52,9 +55,10 @@
 \subtitle{}
 \author[Fu H.P.]{傅海平\inst{1} \and 赵震\inst{2} \and 崔遥\inst{3} 
 \and 王维\inst{4} \and 王宁宁\inst{5} \and 马苗\inst{6}}
-\institute[ICT]{\textsc{\inst{1,2,3,4}计算技术研究所, \inst{5}城市规划发展研究中心, \inst{6}国家空间科学中心\\[5ex]}
+\institute[ICT]{\textsc{\inst{1,2,3,4}计算技术研究所, \inst{5}科技政策与管理研究所, \inst{6}国家空间科学中心\\[5ex]}
 \textbf{中国科学院研究生院, 北京海淀, 中国\\[3ex]}
-\texttt{\inst{1}haiping.ict, \inst{4}wangwei881116}@gmail.com}
+\texttt{\{\inst{1}haiping.ict, \inst{2}applelease, \inst{4}wangwei881116\}@gmail.com,
+\\[1ex]\inst{3}cuiyao163@163.com,\\[1ex]\{\inst{5}578102899, \inst{6}550208974\}@qq.com}}
 %\texttt{haipingf@gmail.com}
 \date{\today}
 
@@ -102,28 +106,126 @@
 \subsection{网络热点发现的兴起}
 \begin{frame}
   \frametitle{Web2.0~时代的网络与个人}
+  \begin{block}{}
+    \begin{tiny}
+      Web2.0~时代以个人为主导的网络传播兴起是互联网发展最显著的一个成果，可以将其视为个人传播时代正式到来的标志。
+      个人媒体一定程度上引领了传统新闻媒介忽视的公共领域，并因其社会功能带来了不可忽视的影响。
+      个人媒体不仅是个人话语、知识和思想的工具，更在结构一种新的社会、社会关系和社会资源。
+    \end{tiny}
+  \end{block}
+  \pause
+  \begin{block}{}
+    \begin{tiny}
+      \alert{微博}，即微博客（MicroBlog）的简称，是一个基于用户关系的信息分享、传播以及获取平台，
+      用户可以通过WEB、WAP以及各种客户端组建个人社区，以140字左右的文字更新信息，并实现即时分享。
+    \end{tiny}
+  \end{block}
+  \pause
+  \begin{definition}{微博}
+    \begin{tiny}
+      国内学者给出了微博的定义：微博是一种通过关注机制分享简短实时信息的广播式的社交网络平台。
+    \end{tiny}
+  \end{definition}
+  \pause
+  \begin{block}{}
+    \begin{tiny}
+      \begin{itemize}
+          \item[–]{关注机制：可单向可双向}
+          \item[–]{简短内容：通常为140字}
+          \item[–]{实时信息：最新实时信息}
+          \item[–]{广播式：公开的信息，谁都可以浏览}
+          \item[–]{社交网络平台：把微博归为社交网络}
+      \end{itemize}
+    \end{tiny}
+  \end{block}
 \end{frame}
 
 \subsection{网络热点挖掘的意义}
 \begin{frame}
   \frametitle{网络热点挖掘的意义}
+  \begin{scriptsize}
+  \begin{block}{}
+    网络话题层出不穷,往往会引发重大舆情危机,如何快速高效的从海量信息中发现热点是
+    一重大挑战。
+  \end{block}
+  \pause
+  \begin{block}{}
+    2011年上半年，我国微博用户数量从6331万增至1.95亿，半年增幅高达208.9\%。微博在网民中的普及率从13.8\%增至40.2\%。
+  \end{block}
+  \pause
+  \begin{block}{}
+      2012年1月，据中国互联网络信息中心（CNNIC）报告显示，截至2011年12月底，我国微博用户数达到2.5亿，
+      较上一年底增长了296.0\%，网民使用率为48.7\%。微博用一年时间发展成为近一半中国网民使用的重要互联网应用。 
+  \end{block}
+  \pause
+  \begin{block}{}
+    　北京市2011年12月推出《北京市微博客发展管理若干规定》，《规定》提出，``后台实名，前台自愿''。
+    微博用户在注册时必须使用真实身份信息，但用户昵称可自愿选择。
+  \end{block}
+  \pause
+  \begin{block}{}
+    新浪、搜狐、网易等各大网站微博都将在2012年3月16日全部实行实名制，采取的都是
+    前台自愿，后台实名的方式。
+  \end{block}
+\end{scriptsize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{网络热点挖掘的意义}
+  \begin{scriptsize}
+  \begin{block}{}
+    社会热点往往是群众共同思想、愿望和要求的反映，往往成为社会气候的晴雨表和社会信息的显示器。
+    社会热点的信息显示,有利于国家采取措施、解决问题、安定民心、稳定社会。
+  \end{block}
+  \pause
+  \begin{block}{}
+    另一方面,社会热点往往呈现自发、松散状态，如不及时疏导，
+    便会因民间的传播、感染、认同而逐渐形成社会舆论合力，冲击人们情绪，不利于社会稳定。
+  \end{block}
+  \pause
+  \begin{block}{}
+    而话题是由一些原因、条件引起,发生在特定时间、地点,并可能伴随某些必然结果的一个事件。
+    它包括一个核心事件或活动以及所有与之直接相关的事件或活动。
+    可能是一起事故、一场会议、一场比赛，等等。它具有很强的时效性，
+    有一定的存在时间,即话题在一定的时间内产生、发展，并随着时间的推移而消亡。
+  \end{block}
+  \end{scriptsize}
+\end{frame}
 %%%%%%%%%%% 研究现状 %%%%%%%%%%%%%%
 \section{研究现状}
-\subsection{国内研究现状}
+\subsection{国内外研究现状}
 \begin{frame}
-  \frametitle{国内研究现状}
-\end{frame}
-
-\subsection{国外研究现状}
-\begin{frame}
-  \frametitle{国外研究现状}
-\end{frame}
-
-\subsection{小结}
-\begin{frame}
-  \frametitle{小结}
+  \frametitle{国内外研究现状}
+  \begin{tiny}
+    \begin{block}{话题检测与跟踪(TDT: Topic Detection and Tracking)}
+      TDT~起源于早期面向事件的检测与跟踪(Event Detection and Tracking,简写为
+      EDT)，话题检测与跟踪是一项面向新闻媒体信息流进行未知话题识别和已知话题跟踪的信息处理技术，
+      TDT的任务以及评测体系是由美国国防高级研究计划局(DARPA)，马萨诸塞大学，
+      卡耐基-梅隆大学和Dragon Systems公司联合制定和设计完成的\cite{Yu Hong}。
+    \end{block}
+    \pause
+    \begin{block}{基于聚类的网络热点发现}
+      \begin{itemize}
+        \item{文献~\cite{Wang}~通过对样本网页文本的特征提取,构建向量空间模型,使用OPTICS算法获取网页热点簇,根据热点簇特征向量对网页进行二次聚类,从而获取关于舆情的时间演变模式。}
+        \item{文献~\cite{Tang}~假设文档标题能够代表文档内容的思想，改进算法采用稀疏特征向量表示文本标题，
+          计算标题间的稀疏相似度，确定初始聚类中心，采用改进的~K-Means~算法提高了聚类的准确度。}
+        \end{itemize}
+    \end{block}
+    \pause
+    \begin{block}{基于主题词的网络热点话题发现}
+      \begin{itemize}
+        \item{\cite{Li}首先综合主题词表和有意义串识别结果生成主题词候选集，然后对候选集进行多重过滤并采用启发式规则对主题词进行权重计算；
+          最后，以主题词为线索，采用多特征的话题模型，融合新闻、论坛、博客的相应特征实现了网络热点话题的发现}
+        \end{itemize}
+    \end{block}
+    \pause
+    \begin{block}{基于~LDA~模型的主题分析}
+      \begin{itemize}
+        \item{\cite{Shi}~以Clarity 度量块间相似性，并通过局部最小值识别片段边界，依据词汇的香农信息提取片段主题词，
+          采取背景词汇聚类及主题词联想的方式将主题词扩充到待分析文本之外，尝试挖掘隐藏于字词表面之下的文本内涵。}
+        \end{itemize}
+    \end{block}
+  \end{tiny}
 \end{frame}
 
 %%%%%%%%%%% 设计方案 %%%%%%%%%%%%%%
@@ -181,9 +283,12 @@
     \begin{block}{定义}
       文本表示采用空间向量模型(VSM)。空间向量模型的基本思想是以一个规范化的特征向量来表示文本。
       \begin{itemize}
+          \pause
           \item{如果一个特征词在某个文档中出现次数越多，那么该词应被认为越重要。}
+          \pause
           \item{如果一个特征词在越多的文档中出现，那么该词区分文档的作用就越低，
             于是其重要性也应当相应降低。}
+          \pause
           \item{一篇文档越长，那么其出现某个特征词的次数可能越高，而每个关键词对这个
             文档的区分作用也越低，相应的应该对这些特征词予以一定的折扣。}
         \end{itemize}
@@ -241,7 +346,32 @@
 \subsection{特征信息扩展}
 \begin{frame}
   \frametitle{特征信息扩展}
-  
+  \begin{scriptsize}
+    \pause
+    \begin{block}{特征词扩展的必要性}
+      \begin{itemize}
+        \item{微博与传统博客、新闻等长文本不同,首先,它的长度很短，
+          另外，微博还可以采用移动终端实时发布，从而会在短时间内产生大量数据。}
+          \pause
+        \item{微博短文本如果采用传统的以词作为特征来表示文本的方法,
+          会由于同一个词现在两篇不同短文本中的概率较小，很难准确计算文本间的相似度。}
+          \pause
+        \item{在短文本基础上建立向量空间模型是不可避免地具有比较高的维度和稀疏空间、噪音数据多等特点。}
+        \end{itemize}
+    \end{block}
+  \end{scriptsize}
+  \begin{scriptsize}
+    \pause
+    \begin{block}{目前普遍采用的方法}
+      \begin{itemize}
+          \pause
+        \item{通过搜索引擎来扩展短文本的上下文，实时性不高，开销大。}
+          \pause
+        \item{通过隐主题模型来给短文本建模，将短文本表示成隐主题按
+          一定比例的混合，它的好处是能够充分挖掘文本集合的内在信息，从而减少短文本的数据稀疏性的影响。}
+        \end{itemize}
+    \end{block}
+  \end{scriptsize}
 \end{frame}
 
 \subsection{降维}
@@ -280,9 +410,37 @@
   \end{block}
 \end{frame}
 
-\subsection{系统结构图}
+\subsection{系统结构}
 \begin{frame}
-  \frametitle{系统结构图}
+  \frametitle{处理流程}
+  \begin{columns}
+    \column{0.55\textwidth}
+      \includegraphics[width=1\textwidth,keepaspectratio]{weibo-mining-procedure.png}
+    \column{0.45\textwidth}
+    \pause
+    \begin{tiny}
+    \begin{itemize}
+    \item<2- | alert@2> {微博预处理过程主要是由于原始的微博数据是~TREC~格式，
+      微博文本中混有~XML~非法字符，如$<$，$>$， $\&$等，预处理过程将其去除，
+      转换成~XML~标准格式。}
+    
+    \item<3-|alert@3> {分词采用计算所~ICTCLAS~分词程序的~Java~版本，由于原始的词
+      库有限，为了达到最大的分词准确率，针对微博内容口语化的特点，我们新增了用户
+      词典（搜狗输入法词库），主要是网络流行词汇，如``有木有''，``伤不起''，``高帅富''等新鲜词汇。}
+    
+    \item<4-|alert@4> {同义词扩展主要参考了《同义词词林》，以及其他网络同义词。}
+
+    \item<5-|alert@5> {特征词降维主要是为了在保证聚类效果的情况下尽量减少聚类空
+      间的维数，采用信息增益的方法进行降维，可以从信息论的观点最大可能保证原有信
+      息流失尽可能少。}
+    \item<6-|alert@6>{特征词权重计算采用了多种权重计算方法，如传统的~TF-IDF~，
+      Okapi权重，TFC，熵权重，最终综合比较各种权重计算方法效果。}
+    \item<7-|alert@7>{聚类采用Mahout程序库，由于该库包含了多种聚类
+      方法，所以最终也可以比较不同聚类算法下的微博文本的聚类效果。}
+
+    \end{itemize}
+    \end{tiny}
+  \end{columns}
 \end{frame}
 
 %%%%%%%%%%% 系统实现 %%%%%%%%%%%%%%
@@ -685,19 +843,29 @@
 \section{参考文献}
 \begin{frame}
   \frametitle{参考文献}
+  \begin{tiny}
   \begin{thebibliography}{99}
+    \bibitem[Yu Hong, 2006]{Yu Hong}{洪宇，张宇，刘挺，李生，话题检测与跟踪的评测及研究综述，2006}
+    \bibitem[Shi Jing, 2009]{Shi}{SHI Jing, FAN Meng, LI Wan-Long, 
+      Topic Analysis Based on LDA Model, Acta Automatica Sinica, vol.35(12),
+      pp.1586-1592, 2009}
+    \bibitem[Rong Lu]{Rong}{Rong Lu, Liang Xiang, M.R. Liu, Qing Yang, Extracting News Topics from Microblogs based on Hidden Topics Analysis and Text Clustering}
+    \bibitem[Wang Wei]{Wang}{王伟，许鑫，基于聚类的网络舆情热点发现及分析，情报分析与研究，2009}
+    \bibitem[Tang, 2011]{Tang}{汤寒青，王汉军，改进的 K-means 算法在网络舆情分析中的应用，计算机系统应用，2011年~第20卷~第3期}
+    \bibitem[Li Heng-Xun,2009]{Li}{李恒训，张华平，秦鹏，于满泉，刘金刚，基于主题词的网络热点话题发现，2009}
     \bibitem[Wikipedia,文本信息检索]{Wikipedia-IR}http://zh.wikipedia.org/zh/文本信息检索
-    \bibitem[Salton,1975]{Salton}G. Salton, A. Wong, and C.S. Yang, “A
-      vector space model for information retrieval”, Communications of the ACM,
+    \bibitem[Salton,1975]{Salton}G. Salton, A. Wong, and C.S. Yang, ``A
+      vector space model for information retrieval'', Communications of the ACM,
       vol. 18(11), pp. 613–620, 1975.
     \bibitem[Robertson, 1999]{Robertson}S. E. Robertson, S. Walker, and M.
-      Beaulieu, “Okapi at TREC7, automatic ad hoc, filtering, VLC and filtering
-      tracks”, in Seventh Text REtrieval Conference (TREC-7), pp. 253–264, 1999.
+      Beaulieu, ``Okapi at TREC7, automatic ad hoc, filtering, VLC and filtering
+      tracks'', in Seventh Text REtrieval Conference (TREC-7), pp. 253–264, 1999.
     \bibitem[Singhal, 1999]{Singhal}A. Singhal, J. Choi, D. Hindle, D. Lewis,
-      and F. Pereira, “AT\&Tat TREC 7”, in Proceedings of the Seventh Text
+      and F. Pereira, ``AT\&Tat TREC 7'', in Proceedings of the Seventh Text
       REtrieval Conference(TREC-7), vol. 500, pp. 239–252, 1999.
     \bibitem[Mahout, official website]{Mahout}http://mahout.apache.org/
   \end{thebibliography}
+  \end{tiny}
 \end{frame}
 
 \end{CJK}
