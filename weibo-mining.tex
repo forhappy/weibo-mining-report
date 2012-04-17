@@ -640,6 +640,11 @@
       \end{array}
     \end{eqnarray*}
     \end{small}
+    其中，$n$~为特征集的维数，$T_k$采用下面公式估计：
+    \pause
+    $$
+    P_k = \frac{Freqency(k)}{\sum_{k = 1 \cdots n}Freqency(k)}
+    $$
   \end{block}
  
 \end{frame}
@@ -805,6 +810,104 @@
   \begin{tiny}
     \begin{block}{}
       返回值(微博ID : $<$特征词1, 权重1$>$ $<$特征词2, 权重2$>$ ...$<$特征词n, 权重n$>$)
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{特征词权重计算：Okapi's TF-IDF}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+        public double calculateTermWeightTFIDF(String term, WeiboXMLHandler.Weibo weibo) {
+            /**
+            * Okapi's TF + IDF
+            * w(t, d) = k1 * tf / (tf + k1 * (1 - b + b * ld / E(l))) 
+            *     * log2((N - df + 0.5) / (df + 0.5))
+            */
+            
+            if (!setUniqueTerms.contains(term)) return 0.0;
+            long numberOfWeibos = cs.getNumberOfWeibos();
+            long termFrequency = termFrequency(term, weibo);
+            long documentFrequency = documentFrequency(term);
+            long documentLength = documentLength(weibo);
+            double k1 = 0.75;
+            double b = 0.4;
+            double tf = k1 * termFrequency / (termFrequency + k1 * 
+                (1 - b + b * documentLength / cs.getAverageWeiboLength()));
+            double idf = Math.log((double)((numberOfWeibos - documentFrequency + 0.5))
+                / (documentFrequency + 0.5));
+            return tf * idf;
+        }
+	      \end{lstlisting}
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{特征词权重计算：TFC}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+        public double calculateTermWeightTFC(String term, WeiboXMLHandler.Weibo weibo) {
+            if (!setUniqueTerms.contains(term)) return 0.0;
+            long numberOfWeibos = cs.getNumberOfWeibos();
+            long termFrequency = termFrequency(term, weibo);
+            long documentFrequency = documentFrequency(term);
+            double tfIdf = Math.log(termFrequency + 1.0) * 
+                Math.log((double)(numberOfWeibos) / documentFrequency);
+                double norm = 0.0;
+                String weiboText = weibo.getWeiboText();
+                String[] terms = weiboText.split("\\s+");
+                for (String otherTerm : terms) {
+                    long otherTermFrequency = termFrequency(otherTerm, weibo);
+                    long otherTermDocumentFrequency = documentFrequency(otherTerm);
+                    double otherTermTfIdf = Math.log(otherTermFrequency + 1.0) 
+                        * Math.log((double)(numberOfWeibos) / otherTermDocumentFrequency);
+                    norm = norm + Math.pow(otherTermTfIdf, 2.0);
+                }
+            return tfIdf / Math.sqrt(norm);
+        }	    
+      \end{lstlisting}
+    \end{block}
+  \end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{特征词权重计算：熵权重}
+  \lstset{language=Java,basicstyle=\ttfamily,commentstyle=\ttfamily}
+  \lstdefinestyle{Java}{delim=[il][\bfseries]{BB}}
+  \definecolor{lightgray}{rgb}{.9,.9,.9}
+  \lstset{backgroundcolor=\color{lightgray}}
+  \begin{tiny}
+    \begin{block}{}
+      \begin{lstlisting}[language=Java]
+        public double calculateTermWeightEntropy(String term, WeiboXMLHandler.Weibo weibo) {
+            if (!setUniqueTerms.contains(term)) return 0.0;
+            long numberOfWeibos = cs.getNumberOfWeibos();
+            long termFrequency = termFrequency(term, weibo);
+            double tf = Math.log((double)(termFrequency + 1.0));
+            double termsEntropy = 0.0;
+            String weiboText = weibo.getWeiboText();
+            String[] terms = weiboText.split("\\s+");
+            for (String otherTerm : terms) {
+                long otherTermFrequency = termFrequency(otherTerm, weibo);
+                long otherTermDocumentFrequency = documentFrequency(otherTerm);
+                double termEntropy = (otherTermFrequency / otherTermDocumentFrequency) 
+                    * Math.log((double)(otherTermFrequency) / otherTermDocumentFrequency);
+                termsEntropy = termsEntropy + termEntropy;
+            }
+            return tf *(1 + 1 / Math.log(numberOfWeibos) * termsEntropy);
+        }
+       	\end{lstlisting}
     \end{block}
   \end{tiny}
 \end{frame}
